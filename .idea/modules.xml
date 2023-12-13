@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Packman.iml" filepath="$PROJECT_DIR$/Packman.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Packman.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Packman.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Packman.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Packman.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PackmanServer.iml" filepath="$PROJECT_DIR$/.idea/PackmanServer.iml" />
+    </modules>
+  </component>
+</project>
