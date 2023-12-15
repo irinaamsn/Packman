@@ -4,7 +4,7 @@ data class Player(
     val name: String,
     val gameStartedTime: Long,
     var countPoints: Int,
-    val map: PlayerMap,
+    var map: PlayerMap,
 ) {
     companion object {
         internal const val DEFAULT_NAME = "Unknown"
@@ -12,14 +12,16 @@ data class Player(
 }
 
 data class PlayerMap(
-    val map: MutableList<MutableList<Int>>,
+    val map: List<IntArray>,
     val coordinatePlayer: Coordinate,
     var lifeCoins: MutableList<Coin>,
 )
+
 data class ClientAddress(
     val ip: String,
     val port: String,
 )
+
 data class Coin(
     val timeCreated: Long,
     val coordinate: Coordinate,
