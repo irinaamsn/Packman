@@ -13,7 +13,7 @@ data class Player(
 
 data class PlayerMap(
     val map: List<IntArray>,
-    val coordinatePlayer: Coordinate,
+    var coordinatePlayer: Coordinate,
     var lifeCoins: MutableList<Coin>,
 )
 
@@ -31,3 +31,10 @@ data class Coordinate(
     val i: Int,
     val j: Int,
 )
+
+data class BestPlayer(
+    val name: String,
+    val countPoints: Int,
+) {
+    override fun toString(): String = "$name,$countPoints"
+}
