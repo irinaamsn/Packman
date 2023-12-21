@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/Packman">
+      <sourceFolder url="file://$MODULE_DIR$/Packman/src/main/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/Packman/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/Packman/build" />
     </content>
