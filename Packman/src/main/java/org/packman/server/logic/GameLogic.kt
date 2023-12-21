@@ -8,7 +8,9 @@ class GameLogic {
     private val usersInfo = UsersInfo
     private val db = Database
 
-    fun processing(ip: String, port: String, command: Command, name: String? = null): String {
+    fun processing(ip: String, port: String, command: Command): String = processing(ip,port,command, null)
+
+    fun processing(ip: String, port: String, command: Command, name: String?): String {
         val clientAddress = ClientAddress(ip = ip, port = port)
 
         if (command.isRequiredExists() && !usersInfo.checkExistsPlayerByClientAddress(clientAddress)) {
@@ -25,6 +27,7 @@ class GameLogic {
             Command.MOVE_DOWN -> movePlayer(clientAddress, Move.DOWN)
             Command.MOVE_LEFT -> movePlayer(clientAddress, Move.LEFT)
             Command.MOVE_RIGHT -> movePlayer(clientAddress, Move.RIGHT)
+            Command.GET_BEST_PLAYERS -> ""
         }
     }
 
