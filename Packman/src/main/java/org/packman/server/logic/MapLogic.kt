@@ -98,8 +98,9 @@ class MapLogic {
 
     private fun PlayerMap.maybeGenerateCoin(): PlayerMap? {
         if (this.lifeCoins.isEmpty()) return this.generateCoin()
+        val maxYoungCoin = this.lifeCoins.map {it.timeCreated}.max()
 
-        if (System.currentTimeMillis() - this.lifeCoins.last().timeCreated < TIME_WHEN_CREATE_COIN)
+        if (System.currentTimeMillis() - maxYoungCoin < TIME_WHEN_CREATE_COIN)
             return this.generateCoin()
 
         return null
@@ -118,9 +119,9 @@ class MapLogic {
         private const val MIN_PRICE_COIN_RANDOM = 10
         private const val MAX_PRICE_COIN_RANDOM = 50
 
-        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(10)
-        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(7)
-        private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(3)
+        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(20)
+        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(15)
+        private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(5)
 
         enum class ParseMap(val value: Int) {
             EMPTY(0),
