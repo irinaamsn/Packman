@@ -42,11 +42,11 @@ class GameLogicImpl: GameLogic {
     }
 
     private fun forceFinish(clientAddress: ClientAddress): String {
-        val points = usersInfo.createPlayer(clientAddress)
-        val currentPosition = db.getCurrentPosition(points)
+        val player = usersInfo.getPlayer(clientAddress)
+        val currentPosition = db.getCurrentPosition(name = player.name, points = player.countPoints)
         usersInfo.removePlayer(clientAddress)
 
-        return createAnsFinish(points, currentPosition)
+        return createAnsFinish(player, currentPosition)
     }
 
     private fun updateMap(clientAddress: ClientAddress): String {
