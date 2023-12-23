@@ -8,6 +8,8 @@ class GameLogicImpl: GameLogic {
     private val usersInfo = UsersInfo
     private val db = Database
 
+    override fun processing(ip: String, port: String, command: Command): String =
+            processing(ip, port, command, null)
     override fun processing(ip: String, port: String, command: Command, name: String?): String {
         val clientAddress = ClientAddress(ip = ip, port = port)
 
@@ -19,6 +21,7 @@ class GameLogicImpl: GameLogic {
             Command.START -> start(clientAddress, name)
             Command.FORCE_FINISH -> forceFinish(clientAddress)
             Command.UPDATE_MAP -> updateMap(clientAddress)
+            Command.GET_BEST_PLAYERS -> bestPlayers()
 
             Command.MOVE_UP -> movePlayer(clientAddress, Move.UP)
             Command.MOVE_DOWN -> movePlayer(clientAddress, Move.DOWN)
@@ -31,6 +34,10 @@ class GameLogicImpl: GameLogic {
         val player = usersInfo.createPlayer(clientAddress, name)
         val timeLeft = getLeftTime(player)
         return createAnsStart(player.map, timeLeft)
+    }
+    private fun bestPlayers(): String {
+        val bestPlayersList = db.getBestPlayers()
+        return createBestPlayers(bestPlayersList)
     }
 
     private fun forceFinish(clientAddress: ClientAddress): String {
@@ -80,6 +87,9 @@ class GameLogicImpl: GameLogic {
         "${GameLogicAnswer.NOT_CHANGED} ${player.map.map} $time ${player.countPoints}"
     private fun createAnsFinish(points: Player, currentPosition: Int) =
         "${GameLogicAnswer.FINISH_GAME} $points $currentPosition"
+
+    private fun createBestPlayers(players: List<BestPlayer>) =
+            "${GameLogicAnswer.OK} $players"
 
     private fun Command.isRequiredExists() = when (this) {
         Command.UPDATE_MAP,

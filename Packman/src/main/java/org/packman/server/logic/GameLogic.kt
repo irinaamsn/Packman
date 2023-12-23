@@ -30,5 +30,7 @@ interface GameLogic {
 	 *  		“FINISH_GAME {currentPoints} {currentPosition}” - игры была успешно окончена
 	 * 			“ERROR_GAME_NOT_EXISTS” - игрок с данным аайпи и портом не найден в текущей сессии
     **/
-    fun processing(ip: String, port: String, command: Command, name: String? = null): String
+	fun processing(ip: String, port: String, command: Command, name: String?): String
+
+	fun processing(ip: String, port: String, command: Command): String
 }

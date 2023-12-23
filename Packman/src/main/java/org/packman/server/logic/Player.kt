@@ -31,3 +31,9 @@ data class Coordinate(
     val i: Int,
     val j: Int,
 )
+data class BestPlayer(
+        val name: String,
+        val countPoints: Int,
+) {
+    override fun toString(): String = "$name,$countPoints"
+}
