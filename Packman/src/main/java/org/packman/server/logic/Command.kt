@@ -4,6 +4,7 @@ enum class Command {
     START,
     UPDATE_MAP,
     FORCE_FINISH,
+    GET_BEST_PLAYERS,
     MOVE_UP,
     MOVE_DOWN,
     MOVE_LEFT,
@@ -17,3 +18,4 @@ enum class Move {
     LEFT,
     RIGHT,
 }
+
