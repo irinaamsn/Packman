@@ -9,7 +9,6 @@ enum class Command {
     MOVE_DOWN,
     MOVE_LEFT,
     MOVE_RIGHT,
-    GET_BEST_PLAYERS
 }
 
 enum class Move {
