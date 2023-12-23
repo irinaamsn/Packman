@@ -7,7 +7,7 @@ class MapLogic {
     fun createMap(): PlayerMap = DifferentMapPlayer.generateMap().generateCoin().generateCoin()
 
     fun movePlayer(player: Player, command: Move): Player? {
-        var wasUpdate = true
+        var wasUpdate: Boolean
         val playerMap = player.map
         val updateMap = updateMap(playerMap) ?: playerMap.also { wasUpdate = false }
 
@@ -86,9 +86,10 @@ class MapLogic {
         while (true) {
             val i = (0 until HEIGHT).random()
             val j = (0 until WIDTH).random()
-            if (this.map[i][j] == ParseMap.WALL.value) {
+            if (this.map[i][j] == ParseMap.EMPTY.value) {
                 val currentTime = System.currentTimeMillis()
                 this.lifeCoins.add(Coin(currentTime, Coordinate(i, j)))
+                this.map[i][j] = ParseMap.COIN.value
                 break
             }
         }
