@@ -1,7 +1,9 @@
 package org.packman.server.logic
 
+import java.util.concurrent.ConcurrentHashMap
+
 object UsersInfo {
-    private val players = mutableMapOf<ClientAddress, Player>()
+    private val players = ConcurrentHashMap<ClientAddress, Player>()
     fun createPlayer(clientAddress: ClientAddress, name: String? = null): Player {
         val mapForPlayer = MapLogic().createMap()
         val currentTime = System.currentTimeMillis()

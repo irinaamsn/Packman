@@ -69,7 +69,7 @@ class GameLogicImpl: GameLogic {
         if (timeLeft <= 0) return forceFinish(clientAddress)
 
         val newMapPlayer = mapLogic.movePlayer(player, command) ?: return createAnsNotChanged(timeLeft)
-        usersInfo.updatePlayer(clientAddress, player)
+        usersInfo.updatePlayer(clientAddress, newMapPlayer)
 
         return createAnsChanged(newMapPlayer, timeLeft)
     }

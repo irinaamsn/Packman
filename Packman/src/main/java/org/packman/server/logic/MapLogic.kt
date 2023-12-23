@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 class MapLogic {
 
-    fun createMap(): PlayerMap = DifferentMapPlayer.generateMap().generateCoin().generateCoin()
+    fun createMap(): PlayerMap = DifferentMapPlayer().generateMap().generateCoin().generateCoin()
 
     fun movePlayer(player: Player, command: Move): Player? {
         var wasUpdate: Boolean
