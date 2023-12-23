@@ -9,7 +9,8 @@ class GameLogicImpl: GameLogic {
     private val db = Database
 
     override fun processing(ip: String, port: String, command: Command): String =
-            processing(ip, port, command, null)
+        processing(ip, port, command, null)
+
     override fun processing(ip: String, port: String, command: Command, name: String?): String {
         val clientAddress = ClientAddress(ip = ip, port = port)
 
@@ -29,15 +30,15 @@ class GameLogicImpl: GameLogic {
             Command.MOVE_RIGHT -> movePlayer(clientAddress, Move.RIGHT)
         }
     }
+    private fun bestPlayers(): String {
+        val bestPlayersList = db.getBestPlayers()
+        return createBestPlayers(bestPlayersList)
+    }
 
     private fun start(clientAddress: ClientAddress, name: String?): String {
         val player = usersInfo.createPlayer(clientAddress, name)
         val timeLeft = getLeftTime(player)
         return createAnsStart(player.map, timeLeft)
-    }
-    private fun bestPlayers(): String {
-        val bestPlayersList = db.getBestPlayers()
-        return createBestPlayers(bestPlayersList)
     }
 
     private fun forceFinish(clientAddress: ClientAddress): String {
@@ -80,16 +81,16 @@ class GameLogicImpl: GameLogic {
         )
     }
 
-    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP} ${map.map} $time"
+    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP} ${map.map.map{it.joinToString(",")}} $time"
     private fun createAnsErrorPlayerNotExists() = GameLogicAnswer.ERROR_GAME_NOT_EXISTS
     private fun createAnsNotChanged(time: Long) = "${GameLogicAnswer.NOT_CHANGED} $time"
     private fun createAnsChanged(player: Player, time: Long) =
-        "${GameLogicAnswer.NOT_CHANGED} ${player.map.map} $time ${player.countPoints}"
-    private fun createAnsFinish(points: Player, currentPosition: Int) =
-        "${GameLogicAnswer.FINISH_GAME} $points $currentPosition"
+        "${GameLogicAnswer.MAP} ${player.map.map.map{it.joinToString(",")}} $time ${player.countPoints}"
+    private fun createAnsFinish(player: Player, currentPosition: Int) =
+        "${GameLogicAnswer.FINISH_GAME} ${player.countPoints} $currentPosition"
 
     private fun createBestPlayers(players: List<BestPlayer>) =
-            "${GameLogicAnswer.OK} $players"
+        "${GameLogicAnswer.OK} $players"
 
     private fun Command.isRequiredExists() = when (this) {
         Command.UPDATE_MAP,

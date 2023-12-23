@@ -7,14 +7,15 @@ class MapLogic {
     fun createMap(): PlayerMap = DifferentMapPlayer.generateMap().generateCoin().generateCoin()
 
     fun movePlayer(player: Player, command: Move): Player? {
+        var wasUpdate = true
         val playerMap = player.map
-        val updateMap = updateMap(playerMap) ?: playerMap
+        val updateMap = updateMap(playerMap) ?: playerMap.also { wasUpdate = false }
 
         val coordinatePlayer = playerMap.coordinatePlayer
 
         val newCoordinatePlayer = when (command) {
-            Move.UP -> Coordinate(i = coordinatePlayer.i + 1, j = coordinatePlayer.j)
-            Move.DOWN -> Coordinate(i = coordinatePlayer.i - 1, j = coordinatePlayer.j)
+            Move.UP -> Coordinate(i = coordinatePlayer.i - 1, j = coordinatePlayer.j)
+            Move.DOWN -> Coordinate(i = coordinatePlayer.i + 1, j = coordinatePlayer.j)
             Move.LEFT -> Coordinate(i = coordinatePlayer.i, j = coordinatePlayer.j - 1)
             Move.RIGHT -> Coordinate(i = coordinatePlayer.i, j = coordinatePlayer.j + 1)
         }
@@ -22,7 +23,7 @@ class MapLogic {
         if (!isMovePossible(newCoordinatePlayer)) return null
 
         val obj = ParseMap.parse(updateMap.map[newCoordinatePlayer.i][newCoordinatePlayer.j])
-        when (obj) {
+        wasUpdate = when (obj) {
             ParseMap.COIN, ParseMap.WEAK_COIN -> {
                 player.countPoints +=  (MIN_PRICE_COIN_RANDOM..MAX_PRICE_COIN_RANDOM).random()
                 updateMap.lifeCoins.removeIf { coin ->
@@ -30,17 +31,21 @@ class MapLogic {
                 }
                 updateMap.map[newCoordinatePlayer.i][newCoordinatePlayer.j] = ParseMap.PLAYER.value
                 updateMap.map[coordinatePlayer.i][coordinatePlayer.j] = ParseMap.EMPTY.value
+                updateMap.coordinatePlayer = newCoordinatePlayer
+                true
             }
 
             ParseMap.EMPTY -> {
                 updateMap.map[newCoordinatePlayer.i][newCoordinatePlayer.j] = ParseMap.PLAYER.value
                 updateMap.map[coordinatePlayer.i][coordinatePlayer.j] = ParseMap.EMPTY.value
+                updateMap.coordinatePlayer = newCoordinatePlayer
+                true
             }
 
-            else -> Unit
+            else -> false
         }
 
-        if (playerMap == updateMap) return null
+        if (!wasUpdate) return null
 
         player.map = updateMap
         return player

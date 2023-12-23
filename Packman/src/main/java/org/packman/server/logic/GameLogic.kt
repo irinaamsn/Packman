@@ -29,8 +29,10 @@ interface GameLogic {
 	 *  3) 	[Command.FORCE_FINISH]:
 	 *  		“FINISH_GAME {currentPoints} {currentPosition}” - игры была успешно окончена
 	 * 			“ERROR_GAME_NOT_EXISTS” - игрок с данным аайпи и портом не найден в текущей сессии
+	 * 	4) 	[Command.GET_BEST_PLAYERS]:
+	 * 			"OK {$name,$countPoints;$name,$countPoints;$name,$countPoints;}"
     **/
-	fun processing(ip: String, port: String, command: Command, name: String?): String
+    fun processing(ip: String, port: String, command: Command, name: String?): String
 
 	fun processing(ip: String, port: String, command: Command): String
 }
