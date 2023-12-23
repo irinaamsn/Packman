@@ -81,16 +81,16 @@ class GameLogicImpl: GameLogic {
         )
     }
 
-    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP} ${map.map.map{it.joinToString(",")}} $time"
+    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP}$SEPARATOR${map.map.map{it.joinToString(",")}}$SEPARATOR$time"
     private fun createAnsErrorPlayerNotExists() = GameLogicAnswer.ERROR_GAME_NOT_EXISTS
-    private fun createAnsNotChanged(time: Long) = "${GameLogicAnswer.NOT_CHANGED} $time"
+    private fun createAnsNotChanged(time: Long) = "${GameLogicAnswer.NOT_CHANGED}$SEPARATOR$time"
     private fun createAnsChanged(player: Player, time: Long) =
-        "${GameLogicAnswer.MAP} ${player.map.map.map{it.joinToString(",")}} $time ${player.countPoints}"
+        "${GameLogicAnswer.MAP}$SEPARATOR${player.map.map.map{it.joinToString(",")}}$SEPARATOR$time$SEPARATOR${player.countPoints}"
     private fun createAnsFinish(player: Player, currentPosition: Int) =
-        "${GameLogicAnswer.FINISH_GAME} ${player.countPoints} $currentPosition"
+        "${GameLogicAnswer.FINISH_GAME}$SEPARATOR${player.countPoints}$SEPARATOR$currentPosition"
 
     private fun createBestPlayers(players: List<BestPlayer>) =
-        "${GameLogicAnswer.OK} $players"
+        "${GameLogicAnswer.OK}$SEPARATOR$players"
 
     private fun Command.isRequiredExists() = when (this) {
         Command.UPDATE_MAP,
@@ -105,5 +105,6 @@ class GameLogicImpl: GameLogic {
 
     companion object {
         private const val TOTAL_TIME_GAME_SECONDS = 59L
+        private const val SEPARATOR = "  "
     }
 }
