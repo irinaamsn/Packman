@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.packman.server.logic.Command;
 import org.packman.server.logic.GameLogic;
+import org.packman.server.logic.GameLogicImpl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import static org.packman.server.utils.PropertiesUtil.getPort;
 @AllArgsConstructor
 public class ServerSocket {
     private static final int PORT = getPort();
-    private static GameLogic gameLogic;
+    private static final GameLogic gameLogic = new GameLogicImpl();
     private static final Logger logger = LogManager.getLogger(ServerSocket.class);
 
     public static void listen() {
