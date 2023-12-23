@@ -52,7 +52,6 @@ class MapLogic {
     }
 
     fun updateMap(playerMap: PlayerMap): PlayerMap? {
-        val map = playerMap.map
         val coins = playerMap.lifeCoins
         val newCoins = mutableListOf<Coin>()
         for (coin in coins) {
@@ -63,12 +62,12 @@ class MapLogic {
                 }
 
                 in 0..TIME_LIFE_CHANGE_COLOR_COIN_MS -> {
-                    map[coin.coordinate.i][coin.coordinate.j] = ParseMap.WEAK_COIN.value
+                    playerMap.map[coin.coordinate.i][coin.coordinate.j] = ParseMap.WEAK_COIN.value
                     newCoins.add(coin)
                 }
 
                 else -> {
-                    map[coin.coordinate.i][coin.coordinate.j] = ParseMap.EMPTY.value
+                    playerMap.map[coin.coordinate.i][coin.coordinate.j] = ParseMap.EMPTY.value
                 }
             }
         }
@@ -79,7 +78,7 @@ class MapLogic {
             null
         }?.let {
             it.maybeGenerateCoin() ?: it
-        } ?: playerMap.maybeGenerateCoin()
+        }
     }
 
     private fun PlayerMap.generateCoin(): PlayerMap {
