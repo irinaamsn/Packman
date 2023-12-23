@@ -1,6 +1,6 @@
 package org.packman.server.logic
 
-object DifferentMapPlayer {
+class DifferentMapPlayer {
     // @TODO (Adel Grishin) create maps
     private val playerMaps = listOf(
         PlayerMap(

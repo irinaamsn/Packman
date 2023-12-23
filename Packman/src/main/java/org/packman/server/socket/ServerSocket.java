@@ -18,7 +18,6 @@ import static org.packman.server.utils.ParseUtil.parseToArray;
 @AllArgsConstructor
 public class ServerSocket {
     private static final int PORT = 2020;
-    private static final GameLogic gameLogic = new GameLogicImpl();
     private static final Logger logger = LogManager.getLogger(ServerSocket.class);
 
     public static void listen() {
@@ -36,6 +35,7 @@ public class ServerSocket {
     private static void handleClient(Socket clientSocket) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)) {
+            GameLogic gameLogic  = new GameLogicImpl();
             String request;
             while ((request = reader.readLine()) != null) {
                 System.out.println("Получен запрос от клиента: " + request);
