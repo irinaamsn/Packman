@@ -7,7 +7,7 @@ data class Player(
     var map: PlayerMap,
 ) {
     companion object {
-        internal const val DEFAULT_NAME = "Unknown"
+        internal const val DEFAULT_NAME = "Чочовец"
     }
 }
 

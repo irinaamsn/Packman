@@ -23,4 +23,6 @@ class Database @Autowired constructor(private val userService: UserService){
                 BestPlayer("Lola4", 100),
         )
     }
+
+    private const val MAX_COUNT_BEST_PLAYERS = 10
 }
