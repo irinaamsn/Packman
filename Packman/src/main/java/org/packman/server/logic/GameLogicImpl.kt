@@ -1,15 +1,17 @@
 package org.packman.server.logic
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
-class GameLogicImpl: GameLogic {
+@Component
+class GameLogicImpl @Autowired constructor(private val db: Database) : GameLogic {
 
     private val mapLogic = MapLogic()
     private val usersInfo = UsersInfo
-    private val db = Database()
 
     override fun processing(ip: String, port: String, command: Command): String =
-        processing(ip, port, command, null)
+            processing(ip, port, command, null)
 
     override fun processing(ip: String, port: String, command: Command, name: String?): String {
         val clientAddress = ClientAddress(ip = ip, port = port)
@@ -30,6 +32,7 @@ class GameLogicImpl: GameLogic {
             Command.MOVE_RIGHT -> movePlayer(clientAddress, Move.RIGHT)
         }
     }
+
     private fun bestPlayers(): String {
         val bestPlayersList = db.getBestPlayers()
         return createBestPlayers(bestPlayersList)
@@ -43,7 +46,7 @@ class GameLogicImpl: GameLogic {
 
     private fun forceFinish(clientAddress: ClientAddress): String {
         val player = usersInfo.getPlayer(clientAddress)
-        val currentPosition = db.getCurrentPosition(name = player.name, points = player.countPoints)
+        val currentPosition = db.getCurrentPosition(username = player.name, points = player.countPoints)
         usersInfo.removePlayer(clientAddress)
 
         return createAnsFinish(player, currentPosition)
@@ -77,20 +80,21 @@ class GameLogicImpl: GameLogic {
     private fun getLeftTime(player: Player): Long {
         val currentTime = System.currentTimeMillis()
         return TimeUnit.MILLISECONDS.toSeconds(
-            player.gameStartedTime + TimeUnit.SECONDS.toMillis(TOTAL_TIME_GAME_SECONDS) - currentTime
+                player.gameStartedTime + TimeUnit.SECONDS.toMillis(TOTAL_TIME_GAME_SECONDS) - currentTime
         )
     }
 
-    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP}$SEPARATOR${map.map.map{it.joinToString(",")}}$SEPARATOR$time"
+    private fun createAnsStart(map: PlayerMap, time: Long) = "${GameLogicAnswer.MAP}$SEPARATOR${map.map.map { it.joinToString(",") }}$SEPARATOR$time"
     private fun createAnsErrorPlayerNotExists() = GameLogicAnswer.ERROR_GAME_NOT_EXISTS
     private fun createAnsNotChanged(time: Long) = "${GameLogicAnswer.NOT_CHANGED}$SEPARATOR$time"
     private fun createAnsChanged(player: Player, time: Long) =
-        "${GameLogicAnswer.MAP}$SEPARATOR${player.map.map.map{it.joinToString(",")}}$SEPARATOR$time$SEPARATOR${player.countPoints}"
+            "${GameLogicAnswer.MAP}$SEPARATOR${player.map.map.map { it.joinToString(",") }}$SEPARATOR$time$SEPARATOR${player.countPoints}"
+
     private fun createAnsFinish(player: Player, currentPosition: Int) =
-        "${GameLogicAnswer.FINISH_GAME}$SEPARATOR${player.countPoints}$SEPARATOR$currentPosition"
+            "${GameLogicAnswer.FINISH_GAME}$SEPARATOR${player.countPoints}$SEPARATOR$currentPosition"
 
     private fun createBestPlayers(players: List<BestPlayer>) =
-        "${GameLogicAnswer.OK}$SEPARATOR$players"
+            "${GameLogicAnswer.OK}$SEPARATOR$players"
 
     private fun Command.isRequiredExists() = when (this) {
         Command.UPDATE_MAP,

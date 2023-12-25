@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: changelog/entities/user.xml

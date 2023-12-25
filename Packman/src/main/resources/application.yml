@@ -1,0 +1,15 @@
+PORT: ${PORT}
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      properties.hibernate.show_sql: true
+      show-sql: true
+
+  liquibase.change-log: classpath:changelog/db.changelog-master.yml
