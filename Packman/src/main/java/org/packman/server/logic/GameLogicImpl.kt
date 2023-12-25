@@ -6,7 +6,7 @@ class GameLogicImpl: GameLogic {
 
     private val mapLogic = MapLogic()
     private val usersInfo = UsersInfo
-    private val db = Database
+    private val db = Database()
 
     override fun processing(ip: String, port: String, command: Command): String =
         processing(ip, port, command, null)

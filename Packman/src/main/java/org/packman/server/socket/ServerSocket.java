@@ -1,11 +1,13 @@
 package org.packman.server.socket;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.packman.server.logic.Command;
 import org.packman.server.logic.GameLogic;
 import org.packman.server.logic.GameLogicImpl;
+import org.packman.server.repositories.UserRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +17,10 @@ import java.net.Socket;
 
 import static org.packman.server.utils.ParseUtil.parseToArray;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ServerSocket {
     private static final int PORT = 2020;
     private static final Logger logger = LogManager.getLogger(ServerSocket.class);
-
     public static void listen() {
         try (java.net.ServerSocket serverSocket = new java.net.ServerSocket(PORT)) {
             System.out.println("Сервер запущен. Ожидание подключений...");
