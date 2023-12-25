@@ -36,7 +36,7 @@ public class ServerSocket {
     private static void handleClient(Socket clientSocket) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)) {
-            GameLogic gameLogic  = new GameLogicImpl();
+             GameLogic gameLogic  = new GameLogicImpl();
             String request;
             while ((request = reader.readLine()) != null) {
                 System.out.println("Получен запрос от клиента: " + request);

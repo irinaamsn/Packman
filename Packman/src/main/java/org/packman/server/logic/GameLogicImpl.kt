@@ -1,14 +1,14 @@
 package org.packman.server.logic
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
+import org.packman.server.logic.Database.Companion.getBestPlayers
+import org.packman.server.logic.Database.Companion.getCurrentPosition
 import java.util.concurrent.TimeUnit
 
-@Component
-class GameLogicImpl @Autowired constructor(private val db: Database) : GameLogic {
+class GameLogicImpl : GameLogic {
 
     private val mapLogic = MapLogic()
     private val usersInfo = UsersInfo
+//    private val db=Database()
 
     override fun processing(ip: String, port: String, command: Command): String =
             processing(ip, port, command, null)
@@ -34,7 +34,7 @@ class GameLogicImpl @Autowired constructor(private val db: Database) : GameLogic
     }
 
     private fun bestPlayers(): String {
-        val bestPlayersList = db.getBestPlayers()
+        val bestPlayersList = getBestPlayers()
         return createBestPlayers(bestPlayersList)
     }
 
@@ -46,7 +46,7 @@ class GameLogicImpl @Autowired constructor(private val db: Database) : GameLogic
 
     private fun forceFinish(clientAddress: ClientAddress): String {
         val player = usersInfo.getPlayer(clientAddress)
-        val currentPosition = db.getCurrentPosition(username = player.name, points = player.countPoints)
+        val currentPosition = getCurrentPosition(username = player.name, points = player.countPoints)
         usersInfo.removePlayer(clientAddress)
 
         return createAnsFinish(player, currentPosition)
