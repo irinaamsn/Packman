@@ -1,14 +1,12 @@
 package org.packman.server.logic
 
-import org.packman.server.logic.Database.Companion.getBestPlayers
-import org.packman.server.logic.Database.Companion.getCurrentPosition
 import java.util.concurrent.TimeUnit
 
 class GameLogicImpl : GameLogic {
 
     private val mapLogic = MapLogic()
     private val usersInfo = UsersInfo
-//    private val db=Database()
+    private val db=Database()
 
     override fun processing(ip: String, port: String, command: Command): String =
             processing(ip, port, command, null)
@@ -34,7 +32,7 @@ class GameLogicImpl : GameLogic {
     }
 
     private fun bestPlayers(): String {
-        val bestPlayersList = getBestPlayers()
+        val bestPlayersList = db.getBestPlayers()
         return createBestPlayers(bestPlayersList)
     }
 
@@ -46,7 +44,7 @@ class GameLogicImpl : GameLogic {
 
     private fun forceFinish(clientAddress: ClientAddress): String {
         val player = usersInfo.getPlayer(clientAddress)
-        val currentPosition = getCurrentPosition(username = player.name, points = player.countPoints)
+        val currentPosition = db.getCurrentPosition(username = player.name, points = player.countPoints)
         usersInfo.removePlayer(clientAddress)
 
         return createAnsFinish(player, currentPosition)
