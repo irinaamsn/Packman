@@ -93,7 +93,7 @@ class GameLogicImpl: GameLogic {
     private fun createAnsFinish(player: Player, currentPosition: Int) =
             "${GameLogicAnswer.FINISH_GAME}$SEPARATOR${player.countPoints}$SEPARATOR$currentPosition"
 
-    private fun createBestPlayers(players: List<AppUserDto>) =
+    private fun createBestPlayers(players: List<BestPlayer>) =
             "${GameLogicAnswer.OK}$SEPARATOR$players"
 
     private fun Command.isRequiredExists() = when (this) {

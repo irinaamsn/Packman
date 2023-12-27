@@ -20,9 +20,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getPosition(String username, int points) {
-        AppUser newAppUser = new AppUser(username, points);
-        userRepository.addUser(newAppUser);
-        return userRepository.getPositionByUsernameAndPoints(username).orElseThrow(
+        if (!userRepository.existsByUsernameAndBestPoints(username,points)) {
+            AppUser newAppUser = new AppUser(username, points);
+            userRepository.addUser(newAppUser);
+        }
+        return userRepository.getPositionByUsernameAndPoints(username, points).orElseThrow(
                 () -> new NotFoundException(400, "Position not found", System.currentTimeMillis()));
     }
 
