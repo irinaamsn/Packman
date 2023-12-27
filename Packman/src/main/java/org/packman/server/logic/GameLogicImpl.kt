@@ -1,12 +1,14 @@
 package org.packman.server.logic
 
+import org.packman.server.dto.AppUserDto
 import java.util.concurrent.TimeUnit
 
-class GameLogicImpl : GameLogic {
+
+class GameLogicImpl: GameLogic {
 
     private val mapLogic = MapLogic()
     private val usersInfo = UsersInfo
-    private val db=Database()
+    private val db = Database()
 
     override fun processing(ip: String, port: String, command: Command): String =
             processing(ip, port, command, null)
@@ -91,7 +93,7 @@ class GameLogicImpl : GameLogic {
     private fun createAnsFinish(player: Player, currentPosition: Int) =
             "${GameLogicAnswer.FINISH_GAME}$SEPARATOR${player.countPoints}$SEPARATOR$currentPosition"
 
-    private fun createBestPlayers(players: List<BestPlayer>) =
+    private fun createBestPlayers(players: List<AppUserDto>) =
             "${GameLogicAnswer.OK}$SEPARATOR$players"
 
     private fun Command.isRequiredExists() = when (this) {

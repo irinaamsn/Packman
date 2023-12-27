@@ -11,5 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AppUserDto {
     private String username;
-    private String points;
+    private Integer bestPoints;
+    @Override
+    public String toString() {
+        return username + "," + bestPoints;
+    }
 }

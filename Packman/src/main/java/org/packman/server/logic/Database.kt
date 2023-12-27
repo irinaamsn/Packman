@@ -1,31 +1,28 @@
 package org.packman.server.logic
 
-import lombok.RequiredArgsConstructor
+import org.packman.server.config.DatabaseConfig.getUserService
+import org.packman.server.dto.AppUserDto
 import org.packman.server.services.UserService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 
-@Component
-@RequiredArgsConstructor
-class Database {
-    @Autowired
-    private lateinit var userService: UserService
 
+class Database() {
+    private var userService: UserService = getUserService();
     fun getCurrentPosition(username: String, points: Int): Int {
         // @TODO Make logic with to save all result of games
-        return userService.getPosition(username, points);
-//            return 10;
+//        return userService.getPosition(username, points);
+        return 10
     }
 
-    fun getBestPlayers(): List<BestPlayer> {
+    fun getBestPlayers(): List<AppUserDto> {
         // @TODO Make logic with to get best players
-//        return userService.getTopPlayers(MAX_COUNT_BEST_PLAYERS);
+//        return userService.getTopPlayers(COUNT_BEST_PLAYERS)
         return listOf(
-                BestPlayer("Lola1", 1000),
-                BestPlayer("Lola2", 900),
-                BestPlayer("Lola3", 500),
-                BestPlayer("Lola4", 100),
+                AppUserDto("Lola1", 1000),
+                AppUserDto("Lola2", 900),
+                AppUserDto("Lola3", 500),
+                AppUserDto("Lola4", 100),
         )
     }
-//    private count val MAX_COUNT_BEST_PLAYERS = 10
+
+    private val COUNT_BEST_PLAYERS = 10
 }

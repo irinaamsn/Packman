@@ -30,4 +30,8 @@ public class AppUser {
         this.username = username;
         this.bestPoints = bestPoints;
     }
+    @Override
+    public String toString() {
+        return username + "," + bestPoints;
+    }
 }
