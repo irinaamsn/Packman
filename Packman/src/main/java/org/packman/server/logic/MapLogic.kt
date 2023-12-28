@@ -83,7 +83,13 @@ class MapLogic {
                 }
 
                 in 0..TIME_LIFE_CHANGE_COLOR_COIN_MS -> {
-                    playerMap.map[coin.coordinate.i][coin.coordinate.j] = ParseMap.WEAK_COIN_LOW.value
+                    playerMap.map[coin.coordinate.i][coin.coordinate.j] =
+                        when(playerMap.map[coin.coordinate.i][coin.coordinate.j]) {
+                            ParseMap.COIN_POWERFUL.value -> ParseMap.WEAK_COIN_POWERFUL.value
+                            ParseMap.COIN_MIDDLE.value -> ParseMap.WEAK_COIN_MIDDLE.value
+                            else -> ParseMap.WEAK_COIN_LOW.value
+                        }
+
                     newCoins.add(coin)
                 }
 
