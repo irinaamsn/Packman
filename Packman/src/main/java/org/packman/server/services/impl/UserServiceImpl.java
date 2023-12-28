@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getPosition(String username, int points) {
-        if (!userRepository.existsByUsernameAndBestPoints(username,points)) {
+        if (!userRepository.existsByUsernameAndBestPoints(username, points)) {
             AppUser newAppUser = new AppUser(username, points);
             userRepository.addUser(newAppUser);
         }
