@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import org.packman.server.logic.Command;
 import org.packman.server.logic.GameLogic;
 import org.packman.server.logic.GameLogicImpl;
-import org.packman.server.services.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,6 @@ import static org.packman.server.utils.PropertiesUtil.getPort;
 //todo log
 @RequiredArgsConstructor
 public class ServerSocket {
-    private final UserService userService;
     private static GameLogic gameLogic;
 
     private static final int PORT = getPort();
