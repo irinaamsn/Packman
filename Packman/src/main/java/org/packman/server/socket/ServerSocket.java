@@ -49,6 +49,7 @@ public class ServerSocket {
                 Command cmd = Command.valueOf(command[0]);
                 String response;
                 if (cmd==Command.START) {
+                    if (command[1].equals("Введите ник")) command[1]=null;
                     response = gameLogic.processing(clientIP, clientPort, cmd, command[1]);
                 } else {
                     response = gameLogic.processing(clientIP, clientPort, Command.valueOf(command[0]));

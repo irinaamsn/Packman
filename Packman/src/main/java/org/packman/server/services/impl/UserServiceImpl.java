@@ -2,7 +2,6 @@ package org.packman.server.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.packman.server.dto.AppUserDto;
-import org.packman.server.exceptions.NotFoundException;
 import org.packman.server.mappers.UserMapper;
 import org.packman.server.models.AppUser;
 import org.packman.server.repositories.UserRepository;
@@ -24,13 +23,14 @@ public class UserServiceImpl implements UserService {
             AppUser newAppUser = new AppUser(username, points);
             userRepository.addUser(newAppUser);
         }
-        return userRepository.getPositionByUsernameAndPoints(username, points).orElseThrow(
-                () -> new NotFoundException(400, "Position not found", System.currentTimeMillis()));
+        return userRepository.getSortUsers().stream()
+                .map(userMapper::toAppUserDto)
+                .toList().indexOf(new AppUserDto(username, points))+1;
     }
 
     @Override
     public List<AppUserDto> getTopPlayers(int countPlayers) {
-        return userRepository.getTopNUsers(PageRequest.of(0, countPlayers)).stream()
+        return userRepository.getTopUsers(PageRequest.of(0, countPlayers)).stream()
                 .map(userMapper::toAppUserDto)
                 .toList();
     }

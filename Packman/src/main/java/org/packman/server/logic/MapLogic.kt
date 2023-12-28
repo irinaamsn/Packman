@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit
 
 class MapLogic {
 
-    fun createMap(): PlayerMap = DifferentMapPlayer().generateMap().generateCoin().generateCoin()
+    fun createMap(): PlayerMap = DifferentMapPlayer()
+            .generateMap()
+            .generateCoin().generateCoin().generateCoin().generateCoin().generateCoin()
 
     fun movePlayer(player: Player, command: Move): Player? {
         var wasUpdate: Boolean
@@ -101,9 +103,9 @@ class MapLogic {
         return if (coins.size != newCoins.size) {
             playerMap.lifeCoins = newCoins
             playerMap.generateCoin()
-        } else {
-            playerMap.maybeGenerateCoin()
-        }
+        } else if (coins.size < MIN_COUNT_COIN) {
+            playerMap.generateCoin()
+        } else playerMap.maybeGenerateCoin()
     }
 
     private fun PlayerMap.generateCoin(): PlayerMap {
@@ -117,8 +119,10 @@ class MapLogic {
             val j = (0 until WIDTH).random()
             if (this.map[i][j] == ParseMap.EMPTY.value) {
                 val currentTime = System.currentTimeMillis()
-                this.lifeCoins.add(Coin(currentTime, Coordinate(i, j)))
+                val bornTime = (currentTime-DIFFERENT_BORN..currentTime+DIFFERENT_BORN).random()
+                this.lifeCoins.add(Coin(bornTime, Coordinate(i, j)))
                 this.map[i][j] = coin.value
+                return this
             }
         }
         return this
@@ -144,6 +148,11 @@ class MapLogic {
         private const val WIDTH = 20
         private const val HEIGHT = 15
 
+        private const val DIFFERENT_BORN = 3000;
+
+        private const val MIN_COUNT_COIN = 7
+
+
         private const val MIN_PRICE_COIN_LOW_RANDOM = 30
         private const val MAX_PRICE_COIN_LOW_RANDOM = 50
 
@@ -154,7 +163,7 @@ class MapLogic {
         private const val MAX_PRICE_COIN_POWERFUL_RANDOM = 120
 
         private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(12)
-        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(7)
+        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(6)
         private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(5)
 
         enum class ParseMap(val value: Int) {
