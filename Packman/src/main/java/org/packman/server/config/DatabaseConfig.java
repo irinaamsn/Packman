@@ -18,8 +18,7 @@ public class DatabaseConfig {
     }
 
     @Autowired
-    public static UserService getUserService(){
+    public static UserService getUserService() {
         return userService;
     }
-
 }
