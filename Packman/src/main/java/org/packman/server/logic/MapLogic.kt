@@ -80,14 +80,13 @@ class MapLogic {
     }
 
     private fun PlayerMap.generateCoin(): PlayerMap {
-        while (true) {
+        repeat(100) {
             val i = (0 until HEIGHT).random()
             val j = (0 until WIDTH).random()
             if (this.map[i][j] == ParseMap.EMPTY.value) {
                 val currentTime = System.currentTimeMillis()
                 this.lifeCoins.add(Coin(currentTime, Coordinate(i, j)))
                 this.map[i][j] = ParseMap.COIN.value
-                break
             }
         }
         return this
@@ -116,7 +115,7 @@ class MapLogic {
         private const val MIN_PRICE_COIN_RANDOM = 10
         private const val MAX_PRICE_COIN_RANDOM = 50
 
-        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(10)
+        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(12)
         private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(7)
         private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(5)
 

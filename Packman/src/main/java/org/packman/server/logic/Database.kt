@@ -7,24 +7,11 @@ import org.packman.server.services.UserService
 
 class Database() {
     private var userService: UserService = getUserService();
-    fun getCurrentPosition(username: String, points: Int): Int {
-        // @TODO Make logic with to save all result of games
-        val l: Int=userService.getPosition(username, points)
-//        return userService.getPosition(username, points)
-        return 10
-    }
+    fun getCurrentPosition(username: String, points: Int): Int = userService.getPosition(username, points)
 
-    fun getBestPlayers(): List<BestPlayer> {
-        var l:AppUserDto
-        // @TODO Make logic with to get best players
-//        return userService.getTopPlayers(COUNT_BEST_PLAYERS)
-        return listOf(
-                BestPlayer("Lola1", 1000),
-                BestPlayer("Lola2", 900),
-                BestPlayer("Lola3", 500),
-                BestPlayer("Lola4", 100)
-        )
-    }
+    fun getBestPlayers(): List<AppUserDto> = userService.getTopPlayers(COUNT_BEST_PLAYERS)
 
-    private val COUNT_BEST_PLAYERS = 10
+    companion object {
+        private const val COUNT_BEST_PLAYERS = 10
+    }
 }
