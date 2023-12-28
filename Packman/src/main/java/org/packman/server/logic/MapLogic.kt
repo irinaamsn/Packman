@@ -73,11 +73,9 @@ class MapLogic {
         }
         return if (coins.size != newCoins.size) {
             playerMap.lifeCoins = newCoins
-            playerMap
+            playerMap.generateCoin()
         } else {
-            null
-        }?.let {
-            it.maybeGenerateCoin() ?: it
+            playerMap.maybeGenerateCoin()
         }
     }
 
@@ -99,7 +97,7 @@ class MapLogic {
         if (this.lifeCoins.isEmpty()) return this.generateCoin()
         val maxYoungCoin = this.lifeCoins.map {it.timeCreated}.max()
 
-        if (System.currentTimeMillis() - maxYoungCoin < TIME_WHEN_CREATE_COIN)
+        if (System.currentTimeMillis() - maxYoungCoin > TIME_WHEN_CREATE_COIN)
             return this.generateCoin()
 
         return null
