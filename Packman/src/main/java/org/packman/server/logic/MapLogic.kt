@@ -109,9 +109,9 @@ class MapLogic {
     }
 
     private fun PlayerMap.generateCoin(): PlayerMap {
-        val coin = when((0..10)) {
-            0..1 -> ParseMap.COIN_POWERFUL
-            2..3 -> ParseMap.COIN_MIDDLE
+        val coin = when((0..10).random()) {
+            in 0..1 -> ParseMap.COIN_POWERFUL
+            in 2..3 -> ParseMap.COIN_MIDDLE
             else -> ParseMap.COIN_LOW
         }
         repeat(100) {
