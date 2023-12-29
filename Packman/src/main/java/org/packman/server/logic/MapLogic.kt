@@ -86,9 +86,10 @@ class MapLogic {
                 }
 
                 in 0..TIME_LIFE_CHANGE_COLOR_COIN_MS -> {
-                    val weakCoin = when(playerMap.map[coin.coordinate.i][coin.coordinate.j]) {
-                            ParseMap.COIN_POWERFUL.value -> ParseMap.WEAK_COIN_POWERFUL.value
-                            ParseMap.COIN_MIDDLE.value -> ParseMap.WEAK_COIN_MIDDLE.value
+                    val parseCoin = ParseMap.parse(playerMap.map[coin.coordinate.i][coin.coordinate.j])
+                    val weakCoin = when(parseCoin) {
+                            ParseMap.COIN_POWERFUL -> ParseMap.WEAK_COIN_POWERFUL.value
+                            ParseMap.COIN_MIDDLE -> ParseMap.WEAK_COIN_MIDDLE.value
                             else -> ParseMap.WEAK_COIN_LOW.value
                         }
 
@@ -104,8 +105,8 @@ class MapLogic {
             }
         }
         return if (isWasChangeMap) {
-            playerMap.lifeCoins = newCoins
-            if (coins.size != newCoins.size) {
+            playerMap.lifeCoins = newCoins.toMutableList()
+            if (coins.size != newCoins.size || coins.size < MIN_COUNT_COIN) {
                 playerMap.generateCoin()
             } else {
                 playerMap
@@ -125,8 +126,8 @@ class MapLogic {
             val i = (0 until HEIGHT).random()
             val j = (0 until WIDTH).random()
             if (this.map[i][j] == ParseMap.EMPTY.value) {
-                val currentTime = System.currentTimeMillis()
-                val bornTime = (currentTime-DIFFERENT_BORN..currentTime+DIFFERENT_BORN).random()
+                val currentTime = System.nanoTime()
+                val bornTime = (currentTime-DIFFERENT_BORN..currentTime + DIFFERENT_BORN).random()
                 this.lifeCoins.add(Coin(bornTime, Coordinate(i, j)))
                 this.map[i][j] = coin.value
                 return this
@@ -139,14 +140,14 @@ class MapLogic {
         if (this.lifeCoins.isEmpty()) return this.generateCoin()
         val maxYoungCoin = this.lifeCoins.map {it.timeCreated}.max()
 
-        if (System.currentTimeMillis() - maxYoungCoin > TIME_WHEN_CREATE_COIN)
+        if (System.nanoTime() - maxYoungCoin > TIME_WHEN_CREATE_COIN)
             return this.generateCoin()
 
         return null
     }
 
     private fun getLifeCoin(createdTime: Long): Long =
-        createdTime + TIME_LIFE_ONE_COIN_MS - System.currentTimeMillis()
+        createdTime + TIME_LIFE_ONE_COIN_MS - System.nanoTime()
 
     private fun isMovePossible(coordinate: Coordinate) =
         !(coordinate.i < 0 || coordinate.i >= HEIGHT || coordinate.j < 0 || coordinate.j >= WIDTH)
@@ -154,8 +155,6 @@ class MapLogic {
     companion object {
         private const val WIDTH = 20
         private const val HEIGHT = 15
-
-        private const val DIFFERENT_BORN = 3000;
 
         private const val MIN_COUNT_COIN = 7
 
@@ -168,9 +167,11 @@ class MapLogic {
         private const val MIN_PRICE_COIN_POWERFUL_RANDOM = 70
         private const val MAX_PRICE_COIN_POWERFUL_RANDOM = 120
 
-        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(12)
-        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(6)
-        private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(5)
+        private val DIFFERENT_BORN = TimeUnit.SECONDS.toNanos(3)
+
+        private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toNanos(12)
+        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toNanos(6)
+        private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toNanos(3)
 
         enum class ParseMap(val value: Int) {
             EMPTY(0),
