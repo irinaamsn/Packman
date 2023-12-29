@@ -27,16 +27,19 @@ class MapLogic {
             ParseMap.COIN_LOW, ParseMap.WEAK_COIN_LOW -> {
                 val addPoints = (MIN_PRICE_COIN_LOW_RANDOM..MAX_PRICE_COIN_LOW_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
+                true
             }
 
             ParseMap.COIN_MIDDLE, ParseMap.WEAK_COIN_MIDDLE -> {
                 val addPoints = (MIN_PRICE_COIN_MIDDLE_RANDOM..MAX_PRICE_COIN_MIDDLE_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
+                true
             }
 
             ParseMap.COIN_POWERFUL, ParseMap.WEAK_COIN_POWERFUL -> {
                 val addPoints = (MIN_PRICE_COIN_POWERFUL_RANDOM..MAX_PRICE_COIN_POWERFUL_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
+                true
             }
 
             ParseMap.EMPTY -> {
@@ -61,7 +64,7 @@ class MapLogic {
         newCoordinatePlayer: Coordinate,
         coordinatePlayer: Coordinate,
         addPoints: Int,
-    ): Boolean {
+    ) {
         player.countPoints += addPoints
         updateMap.lifeCoins.removeIf { coin ->
             coin.coordinate.i == newCoordinatePlayer.i && coin.coordinate.j == newCoordinatePlayer.j
@@ -69,12 +72,12 @@ class MapLogic {
         updateMap.map[newCoordinatePlayer.i][newCoordinatePlayer.j] = ParseMap.PLAYER.value
         updateMap.map[coordinatePlayer.i][coordinatePlayer.j] = ParseMap.EMPTY.value
         updateMap.coordinatePlayer = newCoordinatePlayer
-        return true
     }
 
     fun updateMap(playerMap: PlayerMap): PlayerMap? {
         val coins = playerMap.lifeCoins
         val newCoins = mutableListOf<Coin>()
+        var isWasChangeMap = false
         for (coin in coins) {
             val leftTime = getLifeCoin(coin.timeCreated)
             when (leftTime) {
@@ -83,33 +86,39 @@ class MapLogic {
                 }
 
                 in 0..TIME_LIFE_CHANGE_COLOR_COIN_MS -> {
-                    playerMap.map[coin.coordinate.i][coin.coordinate.j] =
-                        when(playerMap.map[coin.coordinate.i][coin.coordinate.j]) {
+                    val weakCoin = when(playerMap.map[coin.coordinate.i][coin.coordinate.j]) {
                             ParseMap.COIN_POWERFUL.value -> ParseMap.WEAK_COIN_POWERFUL.value
                             ParseMap.COIN_MIDDLE.value -> ParseMap.WEAK_COIN_MIDDLE.value
                             else -> ParseMap.WEAK_COIN_LOW.value
                         }
 
+                    playerMap.map[coin.coordinate.i][coin.coordinate.j] = weakCoin
                     newCoins.add(coin)
+                    isWasChangeMap = true
                 }
 
                 else -> {
                     playerMap.map[coin.coordinate.i][coin.coordinate.j] = ParseMap.EMPTY.value
+                    isWasChangeMap = true
                 }
             }
         }
-        return if (coins.size != newCoins.size) {
+        return if (isWasChangeMap) {
             playerMap.lifeCoins = newCoins
-            playerMap.generateCoin()
+            if (coins.size != newCoins.size) {
+                playerMap.generateCoin()
+            } else {
+                playerMap
+            }
         } else {
             playerMap.maybeGenerateCoin()
         }
     }
 
     private fun PlayerMap.generateCoin(): PlayerMap {
-        val coin = when((0..10)) {
-            0..1 -> ParseMap.COIN_POWERFUL
-            2..3 -> ParseMap.COIN_MIDDLE
+        val coin = when((0..10).random()) {
+            in 0..1 -> ParseMap.COIN_POWERFUL
+            in 2..3 -> ParseMap.COIN_MIDDLE
             else -> ParseMap.COIN_LOW
         }
         repeat(100) {
@@ -119,6 +128,7 @@ class MapLogic {
                 val currentTime = System.currentTimeMillis()
                 this.lifeCoins.add(Coin(currentTime, Coordinate(i, j)))
                 this.map[i][j] = coin.value
+                return this
             }
         }
         return this
