@@ -13,7 +13,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="4ea32f7d-c028-49d1-972d-e2e6b8deeb62">
-      <console name="Connection" type="STANDARD" schema="packman" session="Main" />
+      <console name="Connection" type="STANDARD" schema="packman" session="Main"><![CDATA[SELECT u.username, ROW_NUMBER() OVER (ORDER BY u.best_points DESC) AS position 
+FROM app_user u WHERE u.username = 'Adel5' and u.best_points = 365 
+ORDER BY u.best_points DESC]]></console>
     </connection>
     <connection id="82579073-8837-4a15-a68f-6359eb3cb68c">
       <console name="Connection 1" type="STANDARD" schema="packman" session="Main" />
@@ -31,6 +33,9 @@
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
+  </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
@@ -604,5 +609,8 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
   </component>
 </project>

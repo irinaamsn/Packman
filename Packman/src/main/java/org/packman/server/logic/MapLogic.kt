@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit
 
 class MapLogic {
 
-    fun createMap(): PlayerMap = DifferentMapPlayer().generateMap().generateCoin().generateCoin()
+    fun createMap(): PlayerMap = DifferentMapPlayer()
+            .generateMap()
+            .generateCoin().generateCoin().generateCoin().generateCoin().generateCoin()
 
     fun movePlayer(player: Player, command: Move): Player? {
         var wasUpdate: Boolean
@@ -27,19 +29,16 @@ class MapLogic {
             ParseMap.COIN_LOW, ParseMap.WEAK_COIN_LOW -> {
                 val addPoints = (MIN_PRICE_COIN_LOW_RANDOM..MAX_PRICE_COIN_LOW_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
-                true
             }
 
             ParseMap.COIN_MIDDLE, ParseMap.WEAK_COIN_MIDDLE -> {
                 val addPoints = (MIN_PRICE_COIN_MIDDLE_RANDOM..MAX_PRICE_COIN_MIDDLE_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
-                true
             }
 
             ParseMap.COIN_POWERFUL, ParseMap.WEAK_COIN_POWERFUL -> {
                 val addPoints = (MIN_PRICE_COIN_POWERFUL_RANDOM..MAX_PRICE_COIN_POWERFUL_RANDOM).random()
                 eatCoin(player, updateMap, newCoordinatePlayer, coordinatePlayer, addPoints)
-                true
             }
 
             ParseMap.EMPTY -> {
@@ -64,7 +63,7 @@ class MapLogic {
         newCoordinatePlayer: Coordinate,
         coordinatePlayer: Coordinate,
         addPoints: Int,
-    ) {
+    ): Boolean {
         player.countPoints += addPoints
         updateMap.lifeCoins.removeIf { coin ->
             coin.coordinate.i == newCoordinatePlayer.i && coin.coordinate.j == newCoordinatePlayer.j
@@ -72,6 +71,7 @@ class MapLogic {
         updateMap.map[newCoordinatePlayer.i][newCoordinatePlayer.j] = ParseMap.PLAYER.value
         updateMap.map[coordinatePlayer.i][coordinatePlayer.j] = ParseMap.EMPTY.value
         updateMap.coordinatePlayer = newCoordinatePlayer
+        return true
     }
 
     fun updateMap(playerMap: PlayerMap): PlayerMap? {
@@ -126,7 +126,8 @@ class MapLogic {
             val j = (0 until WIDTH).random()
             if (this.map[i][j] == ParseMap.EMPTY.value) {
                 val currentTime = System.currentTimeMillis()
-                this.lifeCoins.add(Coin(currentTime, Coordinate(i, j)))
+                val bornTime = (currentTime-DIFFERENT_BORN..currentTime+DIFFERENT_BORN).random()
+                this.lifeCoins.add(Coin(bornTime, Coordinate(i, j)))
                 this.map[i][j] = coin.value
                 return this
             }
@@ -154,6 +155,10 @@ class MapLogic {
         private const val WIDTH = 20
         private const val HEIGHT = 15
 
+        private const val DIFFERENT_BORN = 3000;
+
+        private const val MIN_COUNT_COIN = 7
+
         private const val MIN_PRICE_COIN_LOW_RANDOM = 30
         private const val MAX_PRICE_COIN_LOW_RANDOM = 50
 
@@ -164,7 +169,7 @@ class MapLogic {
         private const val MAX_PRICE_COIN_POWERFUL_RANDOM = 120
 
         private val TIME_LIFE_ONE_COIN_MS = TimeUnit.SECONDS.toMillis(12)
-        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(7)
+        private val TIME_WHEN_CREATE_COIN = TimeUnit.SECONDS.toMillis(6)
         private val TIME_LIFE_CHANGE_COLOR_COIN_MS = TimeUnit.SECONDS.toMillis(5)
 
         enum class ParseMap(val value: Int) {
